@@ -37,6 +37,7 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.appstrakt.android.core.view.AppstraktListView;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.SwipeOnTouchListener;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
@@ -70,7 +71,7 @@ import com.nineoldandroids.view.ViewHelper;
  * </p>
  * See http://youtu.be/_BZIvjMgH-Q
  */
-public class DynamicListView extends ListView {
+public class DynamicListView extends AppstraktListView {
 
     private int mOriginalTranscriptMode;
 

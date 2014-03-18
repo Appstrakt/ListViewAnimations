@@ -1,2 +1,3 @@
 include ':library'
 include ':example'
+include '../appstrakt_core/appstrakt_core'
