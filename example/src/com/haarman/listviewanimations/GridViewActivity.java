@@ -1,7 +1,5 @@
 package com.haarman.listviewanimations;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +16,9 @@ import android.widget.ImageView;
 
 import com.nhaarman.listviewanimations.ArrayAdapter;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GridViewActivity extends ActionBarActivity {
 

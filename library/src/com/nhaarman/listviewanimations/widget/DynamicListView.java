@@ -46,6 +46,9 @@ import com.nineoldandroids.animation.TypeEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The DynamicListView is an extension of {@link ListView} that supports cell dragging
  * and swapping.
@@ -74,6 +77,7 @@ import com.nineoldandroids.view.ViewHelper;
 public class DynamicListView extends AppstraktListView {
 
     private int mOriginalTranscriptMode;
+    private List<OnScrollListener> mScrollListeners;
 
     public interface OnHoverCellListener {
         public Drawable onHoverCellCreated(Drawable hoverCellDrawable);
@@ -155,6 +159,13 @@ public class DynamicListView extends AppstraktListView {
         mSmoothScrollAmountAtEdge = (int) (SMOOTH_SCROLL_AMOUNT_AT_EDGE / metrics.density);
         ViewConfiguration vc = ViewConfiguration.get(getContext());
         mSlop = vc.getScaledTouchSlop();
+        mScrollListeners = new ArrayList<OnScrollListener>();
+    }
+
+    public void addScrollListener(OnScrollListener listener) {
+        if (!mScrollListeners.contains(listener)) {
+            mScrollListeners.add(listener);
+        }
     }
 
     public void setAdapter(BaseAdapter adapter) {
@@ -687,6 +698,16 @@ public class DynamicListView extends AppstraktListView {
         }
     }
 
+    private void fireOnScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (mScrollListeners != null) {
+            for (OnScrollListener listener : mScrollListeners) {
+                if (listener != null) {
+                    listener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                }
+            }
+        }
+    }
+
     /**
      * This scroll listener is added to the listview in order to handle cell swapping
      * when the cell is either at the top or bottom edge of the listview. If the hover
@@ -714,6 +735,7 @@ public class DynamicListView extends AppstraktListView {
 
             mPreviousFirstVisibleItem = mCurrentFirstVisibleItem;
             mPreviousVisibleItemCount = mCurrentVisibleItemCount;
+            fireOnScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
 
         @Override
@@ -721,6 +743,7 @@ public class DynamicListView extends AppstraktListView {
             mCurrentScrollState = scrollState;
             mScrollState = scrollState;
             isScrollCompleted();
+
         }
 
         /**
@@ -794,4 +817,9 @@ public class DynamicListView extends AppstraktListView {
          */
         public void swapItems(int positionOne, int positionTwo);
     }
+
+    public int computeVerticalOffset() {
+        return super.computeVerticalScrollOffset();
+    }
+
 }

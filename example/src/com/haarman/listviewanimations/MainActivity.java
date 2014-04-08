@@ -15,11 +15,6 @@
  */
 package com.haarman.listviewanimations;
 
-import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -41,6 +36,11 @@ import android.widget.Toast;
 import com.android.vending.billing.IInAppBillingService;
 import com.haarman.listviewanimations.appearanceexamples.AppearanceExamplesActivity;
 import com.haarman.listviewanimations.itemmanipulationexamples.ItemManipulationsExamplesActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 

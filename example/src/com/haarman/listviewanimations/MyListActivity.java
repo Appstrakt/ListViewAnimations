@@ -15,8 +15,6 @@
  */
 package com.haarman.listviewanimations;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +24,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nhaarman.listviewanimations.ArrayAdapter;
+
+import java.util.ArrayList;
 
 public class MyListActivity extends BaseActivity {
 
