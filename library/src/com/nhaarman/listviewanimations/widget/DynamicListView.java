@@ -25,10 +25,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -37,6 +39,7 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.appstrakt.android.core.helper2.LogcatHelper;
 import com.appstrakt.android.core.view.AppstraktListView;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.SwipeOnTouchListener;
 import com.nineoldandroids.animation.Animator;
@@ -46,6 +49,7 @@ import com.nineoldandroids.animation.TypeEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,6 +141,8 @@ public class DynamicListView extends AppstraktListView {
     private OnItemMovedListener mOnItemMovedListener;
     private int mLastMovedToIndex;
 
+    private View mSelectedView;
+
     public DynamicListView(Context context) {
         super(context);
         init(context);
@@ -184,6 +190,7 @@ public class DynamicListView extends AppstraktListView {
         super.setAdapter(adapter);
     }
 
+    private OnItemLongClickListener mOriginalLongClickListener;
     /**
      * Listens for long clicks on any items in the listview. When a cell has
      * been selected, the hover cell is created and set up.
@@ -191,16 +198,32 @@ public class DynamicListView extends AppstraktListView {
     private OnItemLongClickListener mOnItemLongClickListener = new OnItemLongClickListener() {
         public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
             if (mResIdOfDynamicTouchChild == 0) {
+                LogcatHelper.get().d("base_dynamic_listview", "longclick handled");
                 mDynamicTouchChildTouched = true;
                 makeCellMobile();
+                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 return true;
             }
             return false;
         }
     };
 
+    public void onPreCustomDragIconPressed(View v) {
+        mSelectedView = v;
+    }
+
+    public void onPostConstumDragIconPressed() {
+        if (mResIdOfDynamicTouchChild == 0) {
+            mDynamicTouchChildTouched = true;
+            makeCellMobile();
+            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            mSelectedView = null;
+        }
+    }
+
     private void makeCellMobile() {
         int position = pointToPosition(mDownX, mDownY);
+
         int itemNum = position - getFirstVisiblePosition();
         View selectedView = getChildAt(itemNum);
         if (selectedView == null || position < getHeaderViewsCount() || position >= getAdapter().getCount() - getHeaderViewsCount() - getFooterViewsCount()) {
@@ -209,7 +232,6 @@ public class DynamicListView extends AppstraktListView {
 
         mOriginalTranscriptMode = getTranscriptMode();
         setTranscriptMode(TRANSCRIPT_MODE_NORMAL);
-
 
         mTotalOffset = 0;
 
@@ -346,8 +368,38 @@ public class DynamicListView extends AppstraktListView {
         return childRect;
     }
 
+    private int getLeft(View v) {
+        if (v == this) {
+            return 0;
+        }
+        return v.getLeft() + getLeft((ViewGroup) v.getParent());
+    }
+
+    private int getTop(View v) {
+        if (v == this) {
+            return 0;
+        }
+        return v.getTop() + getTop((ViewGroup) v.getParent());
+    }
+
+    private int getLeft(ViewGroup v) {
+        if (v == this) {
+            return 0;
+        }
+        return v.getLeft() + getLeft((ViewGroup) v.getParent());
+    }
+
+    private int getTop(ViewGroup v) {
+        if (v == this) {
+            return 0;
+        }
+        return v.getTop() + getTop((ViewGroup) v.getParent());
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        LogcatHelper.get().d("base_dynamic_listview", "listview handled motion to lisview " + event.getAction());
+
         if (mSkipCallingOnTouchListener) {
             return super.onTouchEvent(event);
         }
@@ -363,8 +415,14 @@ public class DynamicListView extends AppstraktListView {
 
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                mDownX = (int) event.getX();
-                mDownY = (int) event.getY();
+                if (mSelectedView != null) {
+                    mDownX = getLeft(mSelectedView);
+                    mDownY = getTop(mSelectedView);
+                    mSelectedView = null;
+                } else {
+                    mDownX = (int) event.getX();
+                    mDownY = (int) event.getY();
+                }
                 mActivePointerId = event.getPointerId(0);
 
                 mDynamicTouchChildTouched = false;
@@ -822,4 +880,14 @@ public class DynamicListView extends AppstraktListView {
         return super.computeVerticalScrollOffset();
     }
 
+    public void overrideLongClickListener(OnItemLongClickListener listener) {
+        mOriginalLongClickListener = mOnItemLongClickListener;
+        this.mOnItemLongClickListener = listener;
+        setOnItemLongClickListener(this.mOnItemLongClickListener);
+    }
+
+    public void restoreLongClickListener() {
+        this.mOnItemLongClickListener = mOriginalLongClickListener;
+        setOnItemLongClickListener(mOnItemLongClickListener);
+    }
 }
