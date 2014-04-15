@@ -198,7 +198,6 @@ public class DynamicListView extends AppstraktListView {
     private OnItemLongClickListener mOnItemLongClickListener = new OnItemLongClickListener() {
         public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
             if (mResIdOfDynamicTouchChild == 0) {
-                LogcatHelper.get().d("base_dynamic_listview", "longclick handled");
                 mDynamicTouchChildTouched = true;
                 makeCellMobile();
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
@@ -398,7 +397,6 @@ public class DynamicListView extends AppstraktListView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        LogcatHelper.get().d("base_dynamic_listview", "listview handled motion to lisview " + event.getAction());
 
         if (mSkipCallingOnTouchListener) {
             return super.onTouchEvent(event);
