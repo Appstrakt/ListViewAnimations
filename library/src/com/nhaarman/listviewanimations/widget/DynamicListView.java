@@ -39,7 +39,6 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.appstrakt.android.core.helper2.LogcatHelper;
 import com.appstrakt.android.core.view.AppstraktListView;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.SwipeOnTouchListener;
 import com.nineoldandroids.animation.Animator;
