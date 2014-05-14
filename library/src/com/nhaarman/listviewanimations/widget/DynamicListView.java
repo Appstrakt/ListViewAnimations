@@ -574,26 +574,28 @@ public class DynamicListView extends AppstraktListView {
             updateNeighborViewsForId(mMobileItemId);
 
             final ViewTreeObserver observer = getViewTreeObserver();
-            observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    observer.removeOnPreDrawListener(this);
+            if (observer != null) {
+                observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    public boolean onPreDraw() {
+                        observer.removeOnPreDrawListener(this);
 
-                    View switchView = getViewForId(switchItemId);
+                        View switchView = getViewForId(switchItemId);
 
-                    mTotalOffset += deltaY;
+                        mTotalOffset += deltaY;
 
-                    int switchViewNewTop = switchView.getTop();
-                    int delta = switchViewStartTop - switchViewNewTop;
+                        int switchViewNewTop = switchView.getTop();
+                        int delta = switchViewStartTop - switchViewNewTop;
 
-                    ViewHelper.setTranslationY(switchView, delta);
+                        ViewHelper.setTranslationY(switchView, delta);
 
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(switchView, "translationY", 0);
-                    animator.setDuration(MOVE_DURATION);
-                    animator.start();
+                        ObjectAnimator animator = ObjectAnimator.ofFloat(switchView, "translationY", 0);
+                        animator.setDuration(MOVE_DURATION);
+                        animator.start();
 
-                    return true;
-                }
-            });
+                        return true;
+                    }
+                });
+            }
         }
     }
 
