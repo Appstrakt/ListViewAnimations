@@ -302,16 +302,18 @@ public class DynamicListView extends AppstraktListView {
     private View getViewForId(long itemId) {
         int firstVisiblePosition = getFirstVisiblePosition();
         ListAdapter adapter = getAdapter();
-        if (!adapter.hasStableIds()) {
-            throw new IllegalStateException("Adapter doesn't have stable ids! Make sure your adapter has stable ids, and override hasStableIds() to return true.");
-        }
+        if (adapter != null) {
+            if (!adapter.hasStableIds()) {
+                throw new IllegalStateException("Adapter doesn't have stable ids! Make sure your adapter has stable ids, and override hasStableIds() to return true.");
+            }
 
-        for (int i = 0; i < getChildCount(); i++) {
-            View v = getChildAt(i);
-            int position = firstVisiblePosition + i;
-            long id = adapter.getItemId(position);
-            if (id == itemId) {
-                return v;
+            for (int i = 0; i < getChildCount(); i++) {
+                View v = getChildAt(i);
+                int position = firstVisiblePosition + i;
+                long id = adapter.getItemId(position);
+                if (id == itemId) {
+                    return v;
+                }
             }
         }
         return null;
