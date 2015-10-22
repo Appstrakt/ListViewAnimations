@@ -620,6 +620,11 @@ public class DynamicListView extends AppstraktListView {
      */
     private void touchEventsEnded() {
         final View mobileView = getViewForId(mMobileItemId);
+
+        if (mobileView == null) {
+            return;
+        }
+
         if (mCellIsMobile || mIsWaitingForScrollFinish) {
             mCellIsMobile = false;
             mIsWaitingForScrollFinish = false;
