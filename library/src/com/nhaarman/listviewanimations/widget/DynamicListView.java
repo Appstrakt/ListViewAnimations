@@ -542,6 +542,10 @@ public class DynamicListView extends AppstraktListView {
         View mobileView = getViewForId(mMobileItemId);
         View aboveView = getViewForId(mAboveItemId);
 
+        if (mobileView == null) {
+            return;
+        }
+
         boolean isBelow = (belowView != null) && (deltaYTotal > belowView.getTop());
         boolean isAbove = (aboveView != null) && (deltaYTotal < aboveView.getTop());
 
@@ -624,6 +628,11 @@ public class DynamicListView extends AppstraktListView {
      */
     private void touchEventsEnded() {
         final View mobileView = getViewForId(mMobileItemId);
+
+        if (mobileView == null) {
+            return;
+        }
+
         if (mCellIsMobile || mIsWaitingForScrollFinish) {
             mCellIsMobile = false;
             mIsWaitingForScrollFinish = false;
