@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:2.0.0'
     }
 }
 
@@ -15,13 +15,19 @@ repositories {
 
 dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
-    compile project(":libraries:appstrakt_core:appstrakt_core")
+    compile project(":libraries:appstrakt_core:library")
 
+    androidTestCompile('org.mockito:mockito-core:1.9.5') { exclude group: 'org.hamcrest' }
+    androidTestCompile('com.google.dexmaker:dexmaker-mockito:1.0') {
+        exclude group: 'org.hamcrest'
+    }
+    androidTestCompile('junit:junit:4.11') { exclude group: 'org.hamcrest' }
+    androidTestCompile 'org.hamcrest:hamcrest-all:1.3'
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
 
     sourceSets {
         main {
@@ -38,7 +44,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 14 //core dependant
+        minSdkVersion 8
         targetSdkVersion 19
         versionName project.VERSION_NAME
         versionCode Integer.parseInt(new Date().format('yyyyMMddHH'))

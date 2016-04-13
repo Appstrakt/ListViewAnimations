@@ -39,7 +39,11 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+<<<<<<< Updated upstream
 import com.appstrakt.android.core.view.AppstraktListView;
+=======
+import com.appstrakt.android.widget.AppstraktListView;
+>>>>>>> Stashed changes
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.SwipeOnTouchListener;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
