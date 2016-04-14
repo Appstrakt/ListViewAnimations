@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  * See http://youtu.be/_BZIvjMgH-Q
  */
-public class DynamicListView extends AppstraktListView {
+public class DynamicListView extends ListView {
 
     private int mOriginalTranscriptMode;
     private List<OnScrollListener> mScrollListeners;
