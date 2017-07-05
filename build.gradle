@@ -2,11 +2,11 @@ import java.util.regex.Pattern
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
@@ -84,4 +84,4 @@ tasks.whenTaskAdded { task ->
     }
 }
 
-apply plugin: 'android-reporting'
+//apply plugin: 'android-reporting'
